@@ -36,13 +36,27 @@ interface OrderData {
 
 export default function OrderResultPage({ searchParams }: OrderResultPageProps) {
   const params = use(searchParams);
-  const orderNo = params.out_trade_no || "";
+  const [orderNo, setOrderNo] = useState(params.out_trade_no || "");
 
   const [isPending, startTransition] = useTransition();
   const [order, setOrder] = useState<OrderData | null>(null);
   const [password, setPassword] = useState("");
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(!params.out_trade_no);
+
+  // 如果 URL 没有订单号参数，尝试从 localStorage 读取
+  useEffect(() => {
+    if (!params.out_trade_no) {
+      const savedOrderNo = localStorage.getItem("ldc_last_order_no");
+      if (savedOrderNo) {
+        setOrderNo(savedOrderNo);
+        // 读取后清除，避免下次误用
+        localStorage.removeItem("ldc_last_order_no");
+      }
+      setIsLoading(false);
+    }
+  }, [params.out_trade_no]);
 
   const handleQuery = () => {
     if (!password) {
@@ -72,6 +86,15 @@ export default function OrderResultPage({ searchParams }: OrderResultPageProps) 
       toast.error("复制失败");
     }
   };
+
+  // 等待 localStorage 检查完成
+  if (isLoading) {
+    return (
+      <div className="mx-auto max-w-md px-4 py-12 text-center">
+        <Loader2 className="mx-auto h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   if (!orderNo) {
     return (

@@ -84,6 +84,9 @@ export function OrderForm({
           description: `订单号: ${result.orderNo}`,
         });
 
+        // 保存订单号到 localStorage，用于支付完成后回调页面读取
+        localStorage.setItem("ldc_last_order_no", result.orderNo!);
+
         if (result.paymentForm) {
           const form = document.createElement("form");
           form.method = "POST";
