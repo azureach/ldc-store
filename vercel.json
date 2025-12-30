@@ -3,7 +3,6 @@
   "framework": "nextjs",
   "buildCommand": "pnpm build",
   "installCommand": "pnpm install",
-  "regions": ["hkg1", "sin1", "icn1"],
   "env": {
     "DATABASE_URL": "",
     "AUTH_SECRET": "",
