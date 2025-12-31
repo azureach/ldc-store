@@ -13,6 +13,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const routeNames: Record<string, string> = {
   "/admin": "仪表盘",
@@ -98,6 +99,10 @@ export function AdminHeader() {
           ))}
         </BreadcrumbList>
       </Breadcrumb>
+      
+      <div className="ml-auto">
+        <ThemeToggle />
+      </div>
     </header>
   );
 }

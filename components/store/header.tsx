@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { User, LogOut, Package } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { LinuxDoLogo } from "@/components/icons/linuxdo-logo";
 import { Button } from "@/components/ui/button";
 import {
@@ -47,7 +48,9 @@ export function Header({ siteName = "LDC Store" }: HeaderProps) {
           {siteName}
         </Link>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          
           {/* 用户状态 */}
           {status === "loading" ? (
             <div className="h-8 w-8 animate-pulse rounded-full bg-muted" />
