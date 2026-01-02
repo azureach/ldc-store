@@ -84,7 +84,7 @@
 |--------|------|--------|
 | `NEXT_PUBLIC_SITE_NAME` | 网站名称 | `LDC Store` |
 | `NEXT_PUBLIC_SITE_DESCRIPTION` | 网站描述 | - |
-| `ORDER_EXPIRE_MINUTES` | 订单过期时间(分钟) | `30` |
+| `ORDER_EXPIRE_MINUTES` | 订单过期时间(分钟) | `10` |
 
 ### 步骤 4：部署
 

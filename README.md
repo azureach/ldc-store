@@ -9,13 +9,13 @@
 ## ✨ 特性
 
 ### 🛒 前台商店
-- 商品列表展示、分类导航、搜索功能
-- 商品详情页、热门标签、折扣价格显示
+- 商品列表展示、分类导航
+- 商品详情页（支持 Markdown）、热门标签、折扣价格显示
 - 库存实时展示、销量统计
 
-### 🔐 多种购买方式
-- **Linux DO 登录** - 使用 Linux DO OAuth2 账号登录，自动关联订单
-- **游客购买** - 无需注册，邮箱 + 查询密码即可下单
+### 🔐 登录与权限
+- **用户下单** - 使用 Linux DO Connect OAuth2 登录，下单/查单与账号绑定
+- **后台管理** - 管理员密码登录（`ADMIN_PASSWORD`），或配置 `ADMIN_USERNAMES` 允许指定 Linux DO 用户名以管理员身份登录后台
 
 ### 💳 自动发卡
 - 支持 Linux DO Credit 积分支付
@@ -87,12 +87,15 @@ AUTH_TRUST_HOST=true
 # 管理员密码
 ADMIN_PASSWORD="your-admin-password"
 
+# 管理员用户名白名单（可选，逗号分隔；命中则授予 admin 权限）
+ADMIN_USERNAMES="admin1,admin2"
+
 # Linux DO Credit 支付
 LDC_CLIENT_ID="your_client_id"
 LDC_CLIENT_SECRET="your_client_secret"
 LDC_GATEWAY="https://credit.linux.do/epay"
 
-# Linux DO OAuth2 登录（可选）
+# Linux DO OAuth2 登录（用户下单/查单必须）
 LINUXDO_CLIENT_ID="your_linuxdo_client_id"
 LINUXDO_CLIENT_SECRET="your_linuxdo_client_secret"
 
@@ -103,7 +106,7 @@ NEXT_PUBLIC_SITE_NAME="LDC Store"
 NEXT_PUBLIC_SITE_DESCRIPTION="基于 Linux DO Credit 的虚拟商品自动发卡平台"
 
 # 订单过期时间（分钟）
-ORDER_EXPIRE_MINUTES=30
+ORDER_EXPIRE_MINUTES=10
 ```
 
 ### 3. 初始化数据库
@@ -128,7 +131,9 @@ pnpm dev
 
 ### 管理员登录
 
-访问 `/admin` 输入 `ADMIN_PASSWORD` 环境变量中设置的密码即可登录。
+访问 `/admin`：
+- 管理员密码登录：输入 `ADMIN_PASSWORD`
+- Linux DO 登录（可选）：配置 `ADMIN_USERNAMES` 后，白名单用户可直接登录后台
 
 ## 🔧 环境变量说明
 
@@ -141,11 +146,15 @@ pnpm dev
 | `LDC_CLIENT_ID` | ✅ | - | Linux DO Credit Client ID |
 | `LDC_CLIENT_SECRET` | ✅ | - | Linux DO Credit Client Secret |
 | `LDC_GATEWAY` | ❌ | `https://credit.linux.do/epay` | 支付网关地址 |
-| `LINUXDO_CLIENT_ID` | ✅ | - | Linux DO OAuth2 Client ID（用户登录必须）|
-| `LINUXDO_CLIENT_SECRET` | ✅ | - | Linux DO OAuth2 Client Secret（用户登录必须）|
+| `ADMIN_USERNAMES` | ❌ | - | Linux DO 管理员用户名白名单（逗号分隔），命中则授予 `admin` 角色 |
+| `LINUXDO_CLIENT_ID` | ✅ | - | Linux DO OAuth2 Client ID（用户下单/查单必须）|
+| `LINUXDO_CLIENT_SECRET` | ✅ | - | Linux DO OAuth2 Client Secret（用户下单/查单必须）|
+| `LINUXDO_AUTHORIZATION_URL` | ❌ | - | 自定义 OAuth2 授权端点 |
+| `LINUXDO_TOKEN_URL` | ❌ | - | 自定义 OAuth2 Token 端点 |
+| `LINUXDO_USERINFO_URL` | ❌ | - | 自定义 OAuth2 用户信息端点 |
 | `NEXT_PUBLIC_SITE_NAME` | ❌ | - | 网站名称（显示在 Header 和页面标题）|
 | `NEXT_PUBLIC_SITE_DESCRIPTION` | ❌ | - | 网站描述（用于 SEO）|
-| `ORDER_EXPIRE_MINUTES` | ❌ | `30` | 订单过期时间（分钟）|
+| `ORDER_EXPIRE_MINUTES` | ❌ | `10` | 订单过期时间（分钟）|
 
 ## 📝 Linux DO Credit 配置
 
@@ -157,7 +166,7 @@ pnpm dev
 
 ## 🔑 Linux DO OAuth2 登录配置
 
-支持用户使用 Linux DO 账号登录，获取用户信息。
+用户下单/查单需要使用 Linux DO 账号登录（OAuth2）。
 
 ### 申请接入
 
